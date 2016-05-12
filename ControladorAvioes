@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX 2
+
+typedef struct{
+    int id;
+    char nome[50], origem[50], destino[50];
+}aviao;
+
+typedef struct{
+    int total, comeco, final;
+    aviao fila[MAX];
+}tpfila;
+
+void Iniciar (tpfila *f){
+    f->total = 0;
+    f->comeco = 0;
+    f->final = 0;
+}
+
+int VerCheio (tpfila *f){
+    return (f->total == MAX);
+}
+
+int VerVazio (tpfila *f){
+    return (f->total == 0);
+}
+
+void adc (int *i){
+    (*i)++;
+    if (*i == MAX){
+        *i = 0;
+    }
+}
+
+void Colocarfim (tpfila *f, aviao x){
+    if(VerCheio(f)==0){
+        f->fila[f->total]= x;
+        adc(&f->final);
+        f->total++;
+    }else{
+        printf("Fila cheia!\n\n");
+    }
+}
+
+aviao ColocarIni (tpfila *f){
+    aviao x;
+    if (VerVazio(f)==0){
+        x = (f->fila[f->comeco]);
+        adc (&f->comeco);
+        f->total--;
+        return x;
+    }else{
+        printf("Fila vazia!\n\n");
+    }
+}
+
+
+void AdicionarAviao(tpfila *posi, aviao avi){
+     printf("Digite o ID: ");
+     scanf ("%d", &avi.id);
+     getchar();
+     printf("Digite o Nome: ");
+     gets(avi.nome);
+     printf("Digite a Origem: ");
+     gets(avi.origem);
+     printf("Digite o Destino: ");
+     gets(avi.destino);
+     Colocarfim(posi, avi);
+     printf("\n");
+     system ("cls");
+     
+}
+int Selecionar (tpfila *ordem, aviao *av){
+    int menuP;
+     printf("***  MENU  *** \n"
+           "(1)Adicionar Novo Aviao: \n"
+           "(2)Autorizar Decolagem: \n"
+           "(3)Inf. Primeiro Aviao:  \n"
+           "(4)Mostrar Todos os Avioes: \n"
+           "\nSelecionado:  ");
+           
+    scanf("%d", &menuP);
+    printf("\n");
+    system("cls");
+    if ( menu == 1 ){
+       AdicionarAviao(pos, av);
+    } else if ( menu == 2 ){
+      aviao = ColocarIni(&pos);
+      printf("ID: %d\n", av.id);
+      printf("Nome: ");puts(av.nome);
+      printf("Destino: ");puts(av.destino);
+      printf("Origem: ");puts(av.origem);printf("\n");
+    }       
+}
+    return menuP;
+}
+
+int main (){
+
+    int i, menu;
+    tpfila ordem;
+    aviao av;
+
+    Iniciar(&ordem);
+    while (menu != 0){
+          menu = Selecionar(&ordem, &av);
+          
+    }
+    
+    printf("\n Avioes: \n");
+system("pause");
+return 0;
+}
