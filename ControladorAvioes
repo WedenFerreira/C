@@ -41,6 +41,47 @@ void Colocarfim (tpfila *f, aviao x){
         f->total++;
 }
 
+void mostrarTodos(tpfila *f){
+    aviao x;
+    int cont = f->control;
+    if (VerVazio(f)==0){
+       while(cont < f->total){
+            x = (f->fila[cont]);
+            printf("Posicao: %d\n", cont+1);
+            printf("ID: %d\n", x.id);
+            printf("Nome: ");puts(x.nome);
+            printf("Destino: ");puts(x.destino);
+            printf("Origem: ");puts(x.origem);printf("\n");
+            system("pause");
+            system("cls");
+            cont++;
+       }
+    }else{
+        printf("Fila vazia!\n\n");
+        system("pause");
+        system("cls");
+    }
+     
+}
+
+void informar(tpfila *f){
+    aviao x;
+    if (VerVazio(f)==0){
+        x = (f->fila[f->control]);
+        printf("ID: %d\n", x.id);
+        printf("Nome: ");puts(x.nome);
+        printf("Destino: ");puts(x.destino);
+        printf("Origem: ");puts(x.origem);printf("\n");
+        system("pause");
+        system("cls");
+    }else{
+        printf("Fila vazia!\n\n");
+        system("pause");
+        system("cls");
+    }
+     
+}
+
 void Decolar (tpfila *f){
     aviao x;
     if (VerVazio(f)==0){
@@ -114,6 +155,12 @@ int main (){
       break;
       case 2:     
            Decolar(&ordem);
+      break;
+      case 3:
+           informar(&ordem);
+      break;
+      case 4:
+           mostrarTodos(&ordem);
       break;
       case 5:
            Iniciar(&ordem);
