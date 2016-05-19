@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX 2
+#define MAX 3
 
 typedef struct{
     int id;
-    char nome[50], origem[50], destino[50];
+    char nome[50], origem[50], destino[50], status[20];
 }aviao;
 
 typedef struct{
-    int total, comeco, final;
+    int total, comeco, final, control;
     aviao fila[MAX];
 }tpfila;
 
@@ -17,6 +17,7 @@ void Iniciar (tpfila *f){
     f->total = 0;
     f->comeco = 0;
     f->final = 0;
+    f->control = 0;
 }
 
 int VerCheio (tpfila *f){
@@ -24,7 +25,7 @@ int VerCheio (tpfila *f){
 }
 
 int VerVazio (tpfila *f){
-    return (f->total == 0);
+    return (f->control == f->total);
 }
 
 void adc (int *i){
@@ -35,27 +36,24 @@ void adc (int *i){
 }
 
 void Colocarfim (tpfila *f, aviao x){
-    if(VerCheio(f)==0){
         f->fila[f->total]= x;
         adc(&f->final);
         f->total++;
-    }else{
-        printf("Fila cheia!\n\n");
-    }
 }
 
-void ColocarIni (tpfila *f){
+void Decolar (tpfila *f){
     aviao x;
     if (VerVazio(f)==0){
-        x = (f->fila[f->comeco]);
+        x = (f->fila[f->control]);
         printf("ID: %d\n", x.id);
         printf("Nome: ");puts(x.nome);
         printf("Destino: ");puts(x.destino);
         printf("Origem: ");puts(x.origem);printf("\n");
+        printf("Status: ");puts(x.status);printf("\n");
         system("pause");
         system("cls");
         adc (&f->comeco);
-        f->total--;        
+        f->control++;
     }else{
         printf("Fila vazia!\n\n");
         system("pause");
@@ -64,7 +62,8 @@ void ColocarIni (tpfila *f){
 }
 
 
-void AdicionarAviao(tpfila *posi, aviao avi){
+aviao AdicionarAviao(){
+     aviao avi;
      printf("Digite o ID: ");
      scanf ("%d", &avi.id);
      getchar();
@@ -74,10 +73,9 @@ void AdicionarAviao(tpfila *posi, aviao avi){
      gets(avi.origem);
      printf("Digite o Destino: ");
      gets(avi.destino);
-     Colocarfim(posi, avi);
      printf("\n");
      system ("cls");
-     
+     return avi;
 }
 
 int main (){
@@ -89,25 +87,40 @@ int main (){
     Iniciar(&ordem);
     
     for ( ; ; ){
-     printf("***  MENU  *** \n"
-           "(1)Adicionar Novo Aviao: \n"
+     printf("\t***  MENU  *** \n\n"
+           "(1)Adicionar Novo Aviao:   \n"
            "(2)Autorizar Decolagem: \n"
-           "(3)Inf. Primeiro Aviao:  \n"
+           "(3)Inf. Primeiro Aviao: \n"
            "(4)Mostrar Todos os Avioes: \n"
+           "(5)Limpar Fila: \n"
+           "(0)Sair: \n"
            "\nSelecionado:  ");
      scanf("%d", &menu);
      printf("\n");
      system("cls");
      switch (menu){
-     case 1:
-       AdicionarAviao(&ordem, av);
-     break;
-     case 2:
-      ColocarIni(&ordem);
-     break;
-     default:
-            
-     break;
+      case 0:
+          return 0;
+      break;
+      case 1:
+           if(VerCheio(&ordem)==0){
+               av = AdicionarAviao();
+               Colocarfim(&ordem, av);
+           }else{
+               printf("Fila Cheia!\n\n");
+               system("pause");
+               system("cls");
+           }
+      break;
+      case 2:     
+           Decolar(&ordem);
+      break;
+      case 5:
+           Iniciar(&ordem);
+           printf("** Fila Limpa **\n\n ");
+           system ("pause");
+           system ("cls");
+      break;
     }
 }
 
