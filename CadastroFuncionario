@@ -5,13 +5,13 @@ struct funcionario{
    char nome[60],cargo[80];
    int registro;
    float salario;
-   struct funcionario *prox;
+   struct funcionario *prox, *ant;
 };
 void busca(int rb);
 void criaCelula();
 void exibir();
 void remover(int rb);
-void calcularAumento(int rb); 
+void calcularAumento(int rb);
 int quant();
 void gravar();
 typedef struct funcionario reg;
@@ -24,6 +24,7 @@ void criaCelula(){
    if(inicio==NULL){
       inicio=(reg *)malloc(sizeof(reg));
       inicio->prox=NULL;
+      inicio->ant=NULL;
       aux=inicio;
       printf("Nome:");
       gets(inicio->nome);
@@ -37,6 +38,7 @@ void criaCelula(){
 	   atual=( reg*)malloc(sizeof(reg));
 	   atual->prox=NULL;
 	   aux->prox=atual;
+	   atual->ant=aux;
 	   aux=atual;
 	   printf("Nome:");
 	   gets(atual->nome);
@@ -61,45 +63,45 @@ main(){
   	 printf("\nDigite a opção<< ");
   	 scanf("%d",&opc);
   	 switch(opc){
-  	 	
-       case 1: 
+
+       case 1:
 	   		criaCelula();
             break;
-     
-	   case 2: 
+
+	   case 2:
 	   		exibir();
 	        break;
-	        
-	   case 3: 
+
+	   case 3:
 	   		printf("Cadastros realizados: %d\n",quant());
 	        break;
-	           
-	   case 4: 
+
+	   case 4:
 	   		printf("Digite o registro para a busca: ");
 	        scanf("%d",&rb);
 	        busca(rb);
 	        break;
-        
-       case 5: 
+
+       case 5:
 	   		printf("Digite o registro para a remover: ");
             scanf("%d",&rb);
     		remover(rb);
 	        break;
-               
-       case 6: 
-	   		gravar();     
+
+       case 6:
+	   		gravar();
             break;
-            
-        case 7: 
+
+        case 7:
         	printf("Digite o registro para o reajuste: ");
             scanf("%d",&rb);
-   			calcularAumento(rb); 
+   			calcularAumento(rb);
         	break;
-               
-       case 8: 
-	   		exit(0); 
+
+       case 8:
+	   		exit(0);
 	        break;
-	           
+
 	   default: printf("Opção inválida!\n");
 
   }
@@ -108,12 +110,12 @@ main(){
 }
 
 void exibir(){
-	reg *e=inicio;
+	reg *e=aux;
 	while(e!=NULL){
 		printf("Funcionário: %s\n",e->nome);
 		printf("Cargo: %s\n",e->cargo);
 		printf("Registro: %d\n",e->registro);
-		e=e->prox;
+		e=e->ant;
 	}
 }
 
@@ -165,19 +167,21 @@ void remover(int rb){
 	while(lixo!=NULL && lixo->registro!=rb){
 		aux2=lixo;
 		lixo=lixo->prox;
-	}	 
+	}
 	if(lixo==NULL)
 		printf("Não encontrou!\n");
 	else if(lixo==inicio){
 	    inicio=inicio->prox;
+	    inicio->ant=NULL;
 	    free(lixo);
    }else if(lixo==aux){
-        aux=aux2;
+        aux=aux->ant;
         aux->prox=NULL;
-        free(lixo); 
+        free(lixo);
     }else{
   	    aux2->prox=lixo->prox;
-        free(lixo);  
+  	    lixo->prox->ant=aux2;
+        free(lixo);
 	}
 }
 void calcularAumento(int rb){
